@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#153d37"><meta name="description" content="Il tuo percorso di biochimica: piccoli passi, quiz ragionati e ripassi dai manuali.">
+  <title>ChiaraMente</title><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="manifest" href="./manifest.webmanifest"><link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#oggi"><span class="brand-icon">c<span>·</span></span><span>Chiara<b>Mente</b><br><small>Il tuo spazio di studio</small></span></a>
+      <span class="sidebar-label">IL TUO SPAZIO DI STUDIO</span>
+      <nav aria-label="Navigazione principale">
+        <a href="#oggi" data-route="oggi"><span aria-hidden="true">◷</span> Oggi</a>
+        <a href="#percorso" data-route="percorso"><span aria-hidden="true">☷</span> Percorso</a>
+        <a href="#ripassi" data-route="ripassi"><span aria-hidden="true">↺</span> Ripassi <span id="review-count" class="nav-count"></span></a>
+        <a href="#errori" data-route="errori"><span aria-hidden="true">≡</span> Quaderno degli errori</a>
+        <a href="#manuali" data-route="manuali"><span aria-hidden="true">▤</span> Manuali</a>
+        <a href="#impostazioni" data-route="impostazioni"><span aria-hidden="true">⚙</span> Il mio piano</a>
+      </nav>
+      <div class="sidebar-bottom"><span class="subject-tag">BIOCHIMICA</span><p>Un concetto alla volta.<br>Con il tempo per capirlo.</p><small>Progressi personali, materiali vicini.</small></div>
+    </aside>
+    <div class="main-shell"><header class="topbar"><span>Il tuo percorso, con calma.</span><span id="student-name">Il mio studio</span></header><main id="content" tabindex="-1"></main></div>
+  </div>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="reader-dialog" aria-labelledby="reader-title"><header class="reader-header"><h2 id="reader-title">Manuale</h2><button id="reader-close" type="button" class="button secondary">Chiudi</button></header><div class="reader-controls"><button id="reader-prev" class="button secondary" aria-label="Pagina precedente">Precedente</button><label>Pagina PDF <input id="reader-page" type="number" min="1" inputmode="numeric"></label><span id="reader-total"></span><button id="reader-go" class="button secondary">Vai</button><button id="reader-next" class="button secondary" aria-label="Pagina successiva">Successiva</button></div><p id="reader-status" role="status"></p><div class="reader-canvas"><canvas id="pdf-canvas"></canvas></div></dialog>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
