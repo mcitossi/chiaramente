@@ -1,4 +1,4 @@
-const CACHE='nutrizione-studio-17684bdd4bf8';
+const CACHE='nutrizione-studio-4c607c94c61f';
 const SHELL=['./','./index.html','./styles.css','./app.js','./engine.js','./course.js','./library.js','./book-name.js','./cloud.js','./icon.svg','./manifest.webmanifest','./vendor/pdf.mjs','./vendor/pdf.worker.mjs'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('nutrizione-studio-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
