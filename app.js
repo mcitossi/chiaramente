@@ -72,6 +72,6 @@ await initCloud();
 if(invitation){try{await redeemInvitation(invitation);}catch(e){notify('Biblioteca non collegata: riapri il collegamento riservato. '+e.message);}}
 
 try{await refreshLibrary();}catch{notify('La biblioteca locale non è disponibile in questo browser. I quiz restano utilizzabili.');}
-window.addEventListener('hashchange',route);route();
+window.addEventListener('hashchange',async()=>{const invite=new URLSearchParams(location.hash.slice(1)).get('invito');if(invite){history.replaceState(null,'',location.pathname+location.search+'#manuali');try{await redeemInvitation(invite);await refreshLibrary();}catch(e){notify('Biblioteca non collegata: riapri il collegamento riservato. '+e.message);}}route();});route();
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a&&a.getAttribute('href')===(location.hash||'#oggi')){e.preventDefault();route();}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
