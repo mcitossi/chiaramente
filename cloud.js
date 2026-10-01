@@ -32,6 +32,13 @@ export async function connectDevice(){
  }
  member=null;await refreshMembership();
 }
+export async function redeemInvitation(code){
+ if(!/^[a-f0-9]{64}$/.test(code))throw new Error('Collegamento della biblioteca non valido.');
+ await connectDevice();
+ await api('/rest/v1/rpc/redeem_library_invite',{method:'POST',body:JSON.stringify({invite_code:code})});
+ await refreshMembership();
+ if(!member)throw new Error('Non è stato possibile collegare la biblioteca.');
+}
 export async function logoutCloud(){const pending=session?api('/auth/v1/logout',{method:'POST'}):null;session=null;member=null;saveDevice();await pending;}
 export async function listShared(){if(!session||!member)return [];const rows=await api('/rest/v1/shared_books?select=*&order=added.desc');return rows.map(b=>({...b,name:cleanBookName(b.name),id:`shared:${b.id}`,remoteId:b.id,shared:true}));}
 export async function uploadShared(file,pages,onProgress=()=>{}){
