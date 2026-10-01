@@ -1,4 +1,4 @@
-import {cleanBookName} from './book-name.js?v=e4cf62d0c791';
+import {cleanBookName} from './book-name.js?v=cdc89c4b8dd2';
 // Public project configuration only. Never use a service-role key in this app.
 export const CHUNK_SIZE = 20 * 1024 * 1024;
 export function chunkPaths(owner, id, count) {
@@ -32,8 +32,16 @@ export async function connectDevice(){
  }
  member=null;await refreshMembership();
 }
+export function decodeInvitation(code){
+ if(/^[a-f0-9]{64}$/.test(code))return code;
+ if(/^[A-Za-z0-9_-]{43}$/.test(code)){
+  const bytes=atob(code.replace(/-/g,'+').replace(/_/g,'/')+'=');
+  if(bytes.length===32)return Array.from(bytes,b=>b.charCodeAt(0).toString(16).padStart(2,'0')).join('');
+ }
+ throw new Error('Collegamento della biblioteca non valido.');
+}
 export async function redeemInvitation(code){
- if(!/^[a-f0-9]{64}$/.test(code))throw new Error('Collegamento della biblioteca non valido.');
+ code=decodeInvitation(code);
  await connectDevice();
  await api('/rest/v1/rpc/redeem_library_invite',{method:'POST',body:JSON.stringify({invite_code:code})});
  await refreshMembership();

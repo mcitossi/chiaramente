@@ -1,7 +1,7 @@
-import {initCloud,cloudStatus,connectDevice,redeemInvitation,logoutCloud,listShared,uploadShared,getShared} from './cloud.js?v=e4cf62d0c791';
-import {course,coverage,courseRevision} from './course.js?v=e4cf62d0c791';
-import {dayKey,initialState,firstAvailable,canStudy,recordAnswer,completeQuiz,dueReviews,validateState,selectQuestions} from './engine.js?v=e4cf62d0c791';
-import {listBooks,getBook,removeBook,loadPdf,storeBook} from './library.js?v=e4cf62d0c791';
+import {initCloud,cloudStatus,connectDevice,redeemInvitation,logoutCloud,listShared,uploadShared,getShared} from './cloud.js?v=cdc89c4b8dd2';
+import {course,coverage,courseRevision} from './course.js?v=cdc89c4b8dd2';
+import {dayKey,initialState,firstAvailable,canStudy,recordAnswer,completeQuiz,dueReviews,validateState,selectQuestions} from './engine.js?v=cdc89c4b8dd2';
+import {listBooks,getBook,removeBook,loadPdf,storeBook} from './library.js?v=cdc89c4b8dd2';
 const content=document.querySelector('#content'),key='nutrizione-studio-v1';
 let state=initialState(),library=[],quiz=null,toastTimer,readerPdf=null,renderTask=null,readerToken=0,searchToken=0;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -66,12 +66,13 @@ document.querySelector('#reader-dialog').addEventListener('close',()=>{readerTok
 document.querySelector('#reader-prev').onclick=()=>{document.querySelector('#reader-page').value--;renderPage();};document.querySelector('#reader-next').onclick=()=>{document.querySelector('#reader-page').value++;renderPage();};document.querySelector('#reader-page').onchange=renderPage;
 document.querySelector('#reader-go').onclick=renderPage;document.querySelector('#reader-page').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();renderPage();}};
 async function searchManual(id,query){if(query.length<3)return;const token=++searchToken,status=document.querySelector('#search-status'),results=document.querySelector('#search-results');results.replaceChildren();let pdf;try{const stored=await libraryBook(id);if(!stored)throw new Error('PDF non disponibile.');pdf=await loadPdf(stored.blob);let found=0,withText=0;for(let i=1;i<=pdf.numPages;i++){if(token!==searchToken)break;status.textContent=`Ricerca nella pagina ${i} di ${pdf.numPages} · ${found} risultati`;const page=await pdf.getPage(i),tc=await page.getTextContent(),text=tc.items.map(x=>x.str).join(' '),at=text.toLocaleLowerCase('it-IT').indexOf(query.toLocaleLowerCase('it-IT'));if(text.trim())withText++;if(token!==searchToken)break;if(at>=0){found++;const b=document.createElement('button');b.className='search-result';b.dataset.action='read';b.dataset.book=id;b.dataset.page=i;b.innerHTML=`<strong>Pagina PDF ${i}</strong><small>${esc(text.slice(Math.max(0,at-75),at+160))}</small>`;results.append(b);}page.cleanup();if(found>=30){status.textContent='Mostrati i primi 30 risultati. Specifica meglio il concetto per restringere la ricerca.';break;}if(i===pdf.numPages)status.textContent=found?`${found} pagine trovate.`:withText?'Nessuna corrispondenza nel testo incorporato.':'Il PDF non contiene testo leggibile: occorre un riconoscimento OCR.';if(i%5===0)await new Promise(r=>setTimeout(r,0));}}catch(err){if(token===searchToken)status.textContent=`Ricerca non riuscita: ${err.message}`;}finally{if(pdf)await pdf.destroy();}}
-const invitation=new URLSearchParams(location.hash.slice(1)).get('invito');
-if(invitation){history.replaceState(null,'',location.pathname+location.search+'#manuali');}
+const invitationParams=new URLSearchParams(location.hash.slice(1));
+const invitation=invitationParams.get('c')||invitationParams.get('invito');
+if(invitation){history.replaceState(null,'',location.pathname+location.search+'#percorso');}
 await initCloud();
 if(invitation){try{await redeemInvitation(invitation);}catch(e){notify('Biblioteca non collegata: riapri il collegamento riservato. '+e.message);}}
 
 try{await refreshLibrary();}catch{notify('La biblioteca locale non è disponibile in questo browser. I quiz restano utilizzabili.');}
-window.addEventListener('hashchange',async()=>{const invite=new URLSearchParams(location.hash.slice(1)).get('invito');if(invite){history.replaceState(null,'',location.pathname+location.search+'#manuali');try{await redeemInvitation(invite);await refreshLibrary();}catch(e){notify('Biblioteca non collegata: riapri il collegamento riservato. '+e.message);}}route();});route();
+window.addEventListener('hashchange',async()=>{const params=new URLSearchParams(location.hash.slice(1));const invite=params.get('c')||params.get('invito');if(invite){history.replaceState(null,'',location.pathname+location.search+'#percorso');try{await redeemInvitation(invite);await refreshLibrary();}catch(e){notify('Biblioteca non collegata: riapri il collegamento riservato. '+e.message);}}route();});route();
 document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a&&a.getAttribute('href')===(location.hash||'#oggi')){e.preventDefault();route();}});
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
