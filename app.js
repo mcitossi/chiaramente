@@ -1,7 +1,7 @@
-import {initCloud,cloudStatus,connectDevice,redeemInvitation,logoutCloud,listShared,uploadShared,getShared} from './cloud.js';
-import {course,coverage,courseRevision} from './course.js';
-import {dayKey,initialState,firstAvailable,canStudy,recordAnswer,completeQuiz,dueReviews,validateState,selectQuestions} from './engine.js';
-import {listBooks,getBook,removeBook,loadPdf,storeBook} from './library.js';
+import {initCloud,cloudStatus,connectDevice,redeemInvitation,logoutCloud,listShared,uploadShared,getShared} from './cloud.js?v=e4cf62d0c791';
+import {course,coverage,courseRevision} from './course.js?v=e4cf62d0c791';
+import {dayKey,initialState,firstAvailable,canStudy,recordAnswer,completeQuiz,dueReviews,validateState,selectQuestions} from './engine.js?v=e4cf62d0c791';
+import {listBooks,getBook,removeBook,loadPdf,storeBook} from './library.js?v=e4cf62d0c791';
 const content=document.querySelector('#content'),key='nutrizione-studio-v1';
 let state=initialState(),library=[],quiz=null,toastTimer,readerPdf=null,renderTask=null,readerToken=0,searchToken=0;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

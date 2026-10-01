@@ -1,4 +1,4 @@
-import {cleanBookName} from './book-name.js';
+import {cleanBookName} from './book-name.js?v=e4cf62d0c791';
 // Public project configuration only. Never use a service-role key in this app.
 export const CHUNK_SIZE = 20 * 1024 * 1024;
 export function chunkPaths(owner, id, count) {

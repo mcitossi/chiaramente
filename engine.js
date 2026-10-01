@@ -1,4 +1,4 @@
-import {courseRevision} from './course.js';
+import {courseRevision} from './course.js?v=e4cf62d0c791';
 export function dayKey(date=new Date()) {return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;}
 export function addDays(key,n){const [y,m,d]=key.split('-').map(Number);const date=new Date(y,m-1,d+n,12);return dayKey(date);}
 export function initialState(){return {version:1,courseRevision,profile:{name:'',minutes:15,exam:'',course:'molecolari',academicYear:'2026/2027'},units:{},reviews:{},mistakes:{},activity:{},notes:{}};}
